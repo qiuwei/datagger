@@ -4,6 +4,8 @@ import re
 import io
 import os
 import kea
+import argparse
+import random
 from nltk import tokenize
 from nltk import data
 from nltk.corpus import stopwords
@@ -55,9 +57,6 @@ class CorpusBuilder:
                 self._build(os.path.join(root, f))
         self._build_vsm()
 
-    def extract_feature(self):
-        pass
-
     def _build_vsm(self):
         '''
         build vsm model for feature extraction
@@ -79,18 +78,26 @@ class CorpusBuilder:
         term_document = vectorizer.fit_transform(content_corpus)
         #print term_document.toarray()
         #print u'bon' in vectorizer.get_feature_names()
-        print "The number of features is {}".format(str(len(vectorizer.get_feature_names())))
         #self.analyze = vectorizer.build_analyzer()
         self.vectorizer = vectorizer
 
 
     def build_crf_corpus(self, percetage = 0.9):
         # Todo: shuffle or not
+        print "The number of features is {}".format(str(len(self.vectorizer.get_feature_names())))
         trainlen = int(len(self._corpus) * 0.9)
         corpus_train = self._corpus[:trainlen]
         corpus_test = self._corpus[trainlen:]
         self._build_crf_corpus_help(corpus_train, 'train.data')
         self._build_crf_corpus_help(corpus_test, 'test.data')
+
+    def get_unlabeld_corpus(self, percentage = 0.05):
+        random.shuffle(self._corpus)
+        for dialog in self._corpus[:int(len(self._corpus) * 0.05)]:
+            for u in dialog:
+                print u">{0}:{1} ||||".format(u[0], u[1]).encode('utf8')
+            print
+
 
     def _build_crf_corpus_help(self, corpus, outfilename):
         emp = "\t"
@@ -137,15 +144,24 @@ class CorpusBuilder:
 
 
 def main():
+    argParser = argparse.ArgumentParser()
+    argParser.add_argument("corpuspath", help="The path to the corpus")
+    argParser.add_argument("build", choices=['crf','sample'], help='''select what kind of corpus to generate.
+                           \n sample: to generate unlabled data.
+                           \n crf: to build training and test data for crf''')
+    args = argParser.parse_args()
     cb = CorpusBuilder()
-    cb.build("../../data/CorpusAllegroChatV00/")
+    cb.build(args.corpuspath)
+    if args.build == "crf":
+        cb.build_crf_corpus()
+    elif args.build == "sample":
+        cb.get_unlabeld_corpus()
 
     # test
     #for dialog in cb._corpus:
     #    for utterance in dialog:
     #        print utterance
     #    print "===="
-    cb.build_crf_corpus()
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,78 @@
+>mana:Avant de commencer j'ai besoin de quelques informations! ||||
+>mana:Quel age as tu ? ||||
+>learner:41 ans ||||
+>mana:Es tu une femme ou un homme ? ||||
+>learner:Un homme. ||||
+>mana:Quelle est ta langue maternelle ? ||||
+>learner:Le français. (14) ||||
+>mana:Parles tu une deuxième langue ? ||||
+>learner:L'anglais. (11) ||||
+>mana:Merci, nous pouvons commencer le dialogue. ||||
+>mana:Bienvenue dans ma maison , je suis le chat , veux tu jouer avec moi ? ||||
+>learner:oui ||||
+>mana:Super , comment vas tu aujourd'hui? ||||
+>learner:Un peu humide comme journée mais ca va. ||||
+>mana:Oui c'est vrai! ||||
+>mana:Viens , je vais te montrer la cuisine . ||||
+>mana:Dans la cuisine , on prépare les repas . Je fais souvent des soupes . Préfères tu la soupe ou la salade ? ||||
+>learner:en ce moment une bonne soupe chaude me tente bien ||||
+>mana:Oui la soupe c' est très bon . ||||
+>mana:Avec mon repas , je mange toujours du fromage . ||||
+>mana:Sais tu où on range le fromage dans une cuisine ? ||||
+>learner:En ce qui me concerne, je les stoke dans le frigo ||||
+>mana:Tu as raison ! ||||
+>mana:On range le fromage dans le frigidaire . ||||
+>mana:Avec mon repas je bois toujours du lait . Et toi , qu' est ce que tu aimes boire , est ce que tu préfères le lait , l' eau ou le vin ? ||||
+>learner:ça dépend du moment de la journée mais en générale je préfère de l'eau. ||||
+>mana:En effet cela dépend des circonstances . ||||
+>mana:En France , on boit du vin ou de l' eau avec les repas . ||||
+>mana:Pour mettre la table , il faut des cuillères , des fourchettes , des couteaux et encore d' autres choses . Peux tu nommer un autre objet à mettre sur la table avant le repas ? ||||
+>learner:A priori il faut aussi des verres. ||||
+>mana:Oui tout à fait . ||||
+>mana:Sur la table , on met les assiettes , une carafe d' eau , du sel , du poivre et des verres . ||||
+>mana:Après le repas , il faut ranger et nettoyer . Pour le sol , j' utilise le balai mais on peut aussi utiliser un autre objet . Sais tu lequel ? ||||
+>learner:On peut prendre une serpillère. ||||
+>mana:c' est vrai . ||||
+>mana:On peut aussi utiliser un aspirateur . ||||
+>mana:Merci pour cette petite conversation . Au revoir et à la prochaine fois ! ||||
+
+>mana:Avant de commencer j' ai besoin de quelques informations ! ||||
+>mana:Quel age as tu ? ||||
+>learner:32 ans ||||
+>mana:Es tu une femme ou un homme ? ||||
+>learner:je suis une femme ||||
+>mana:Quelle est ta langue maternelle ? ||||
+>learner:ma langue maternelle est tamazighte ||||
+>mana:Es tu bilingue ? Si oui quelle est ta deuxième langue maternelle ? ||||
+>learner:oui je le suis, ma seconde langue est l'arabe (2) ||||
+>mana:Parles tu une autre langue ? Si oui laquelle . ||||
+>learner:oui, je parle également le français et l'anglais (14 - 11) ||||
+>mana:Comment as tu appris le français ? ||||
+>learner:j'ai appris le français à l'école (2) ||||
+>mana:Merci , nous pouvons commencer le dialogue . ||||
+>mana:Bonjour , je suis le chat . Veux tu jouer avec moi ? ||||
+>learner:Oui, avec plaisir. ||||
+>mana:Super , comment vas tu ? ||||
+>learner:ça va, je vais bien. et toi tu vas bien? ||||
+>mana:Moi,je vais bien aussi, merci ! ||||
+>mana:Viens je vais te montrer la cuisine . ||||
+>mana:J' aime préparer les repas . Je fais souvent des soupes . Préfères tu la soupe ou la salade ? ||||
+>learner:Franchement, je n'aime ni la soupe ni la salade. ||||
+>mana:oh, moi ce que je préfère c'est le fromage. J'en mange avec tous mes repas. ||||
+>mana:Sais tu où on range le fromage dans une cuisine ? ||||
+>learner:Je pense qu'il faut le ranger dans le frigo ||||
+>mana:Tu as raison ! ||||
+>mana:On range le fromage dans le frigidaire . ||||
+>mana:Avec mon repas je bois toujours du lait . Et toi , qu' est ce que tu aimes boire , est ce que tu préfères le lait , l' eau ou le vin ? ||||
+>learner:Personnelement, j'aime boire du jus avec mon repas. ||||
+>mana:Oui le jus de fruit, c' est bon aussi . ||||
+>mana:En France , on boit souvent du vin avec les repas . ||||
+>mana:Pour mettre la table , il faut des cuillères , des fourchettes , des couteaux et encore d' autres choses . Peux tu nommer un autre objet à mettre sur la table avant le repas ? ||||
+>learner:Il faut mettre du sel sur la table avant le repas. ||||
+>mana:Oui c' est vrai. ||||
+>mana:Sur la table , on met les assiettes , une carafe d' eau , du poivre et des verres . ||||
+>mana:Après le repas , il faut ranger et nettoyer . Pour le sol , j' utilise le balai mais on peut aussi utiliser un autre objet . Sais tu lequel ? ||||
+>learner:Je pense que le second objet qu'on peut utiliser pour nettoyer le sol est bien l'aspirateur. ||||
+>mana:Tout à fait! ||||
+>mana:Merci pour cette petite conversation . Au revoir et à la prochaine fois ! ||||
+
