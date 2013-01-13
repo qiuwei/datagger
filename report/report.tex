@@ -97,9 +97,16 @@ Dialog act is a specialized speech act which normally includes acts such as prom
 Research in dialog acts increases since 1999, after spoken dialog  systems became commercial reality. There are generally two ways to identify speech act, namely script-based method and learning-based method. In our task it's actually a classifying problem rather than an identifying problem. So we here will generally give a short review of learning based methods in this area.
 
 \section{Apply sequential labeling methods to this task}
-\subsection{Basic introduction to CRF}
-TODO(Bruno?)
-0.5 to 1 page
+\subsection{Basic introduction to CRFs}
+In this project, we used a classifier based on Conditional Random Fields (CRFs).\\
+Conditional Random Fields was introduced by John Lafferty, Andrew McCallum and Fernando Pereira.\\
+Conditional Random Fields is a framework for building probabilistic models to segment and label sequence data.\\
+Conditional Random Fields offer several advantages over hidden Markov models and stochastic grammars for such tasks, including the ability to relax strong -independence assumptions made in those models.\\
+Conditional Random Fields also avoid a fundamental limitation of Maximum Entropy Markov Models (MEMMs) and other discriminative Markov models based on directed graphical models, which can be biased towards states with few successor states.\\
+Whereas an ordinary classifier predicts a label for a single sample without regard to "neighboring" samples, a CRF can take context into account.\\
+Conditional Random Fields framework has all the advantages of Maximum entropy Markov Models but also solves the label bias problem in a principled way.\\
+The critical difference between CRFs and MEMMs is that a MEMM uses per-state exponential models for the conditional probabilities of next states given the current state, while a CRF has a single exponential model for the joint probability of the entire sequence of labels given the observation sequence. Therefore, the weights of different features at different states can be traded off against each other.\\
+A CRF is a finite state model with unnormalized transition probabilities.
 \subsection{Dialog Act prediction as sequential labeling problem}
 Strictly speaking Dialog Act prediction is quite different to typical sequential labeling problem such as POS tagging or speech recognition. The reason is that in traditional sequential labeling problem, the observed states which are required to be tagged are all available or at least a bunch of them are available as a minimal unit. However, in dialog act prediction problem, the observed states are dynamic and growing. And during run time, the dialog act predictor cares more about current state. Though the previous states may contain errors, the system would not have any interests to retag them and correct the mistakes in the history. This kinds of reflects the two different natures of theses two tasks.
 
