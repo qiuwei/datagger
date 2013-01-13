@@ -82,14 +82,34 @@ class CorpusBuilder:
         self.vectorizer = vectorizer
 
 
-    def build_crf_corpus(self, percetage = 0.9):
+    def build_crf_corpus(self, percetage = 0.9, path="",cross_validation=False):
         # Todo: shuffle or not
+        def chunks(l, n):
+            """ Yield successive n-sized chunks from l.
+            """
+            for i in xrange(0, len(l), n):
+                yield l[i:i+n]
+
         print "The number of features is {}".format(str(len(self.vectorizer.get_feature_names())))
-        trainlen = int(len(self._corpus) * 0.9)
-        corpus_train = self._corpus[:trainlen]
-        corpus_test = self._corpus[trainlen:]
-        self._build_crf_corpus_help(corpus_train, 'train.data')
-        self._build_crf_corpus_help(corpus_test, 'test.data')
+        if not cross_validation:
+            trainlen = int(len(self._corpus) * 0.9)
+            corpus_train = self._corpus[:trainlen]
+            corpus_test = self._corpus[trainlen:]
+            self._build_crf_corpus_help(corpus_train, os.join(path, 'train.data'))
+            self._build_crf_corpus_help(corpus_test, os.join(path, 'test.data'))
+        else:
+            len1 = int(len(self._corpus) * 0.1)
+            corpus10fold = list(chunks(self._corpus, len1))
+            for i in range(10):
+                corpus_test = corpus10fold[i]
+                corpus_train = [instance for t in corpus10fold if t is not corpus_test for instance in t ]
+                dpath = os.path.join(path, str(i))
+                if not os.path.exists(dpath):
+                    os.mkdir(dpath)
+                self._build_crf_corpus_help(corpus_test, os.path.join(path, str(i), 'test.data'))
+                self._build_crf_corpus_help(corpus_train, os.path.join(path, str(i), 'train.data'))
+
+
 
     def get_unlabeld_corpus(self, percentage = 0.05):
         random.shuffle(self._corpus)
@@ -149,11 +169,21 @@ def main():
     argParser.add_argument("build", choices=['crf','sample'], help='''select what kind of corpus to generate.
                            \n sample: to generate unlabled data.
                            \n crf: to build training and test data for crf''')
+    argParser.add_argument("--cv", action="store_true", help="build cross_validation corpus")
+    argParser.add_argument("--path", help="place to put the generated corpus data")
     args = argParser.parse_args()
     cb = CorpusBuilder()
     cb.build(args.corpuspath)
+    import ipdb; ipdb.set_trace()
+    # create the dir if not exists
+    if args.path is not None:
+        if not os.path.exists(args.path):
+            os.mkdir(args.path)
     if args.build == "crf":
-        cb.build_crf_corpus()
+        if args.cv:
+            cb.build_crf_corpus(cross_validation=True, path=args.path)
+        else:
+            cb.build_crf_corpus(path=args.path)
     elif args.build == "sample":
         cb.get_unlabeld_corpus()
 

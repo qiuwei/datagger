@@ -5,6 +5,7 @@
 \documentclass[a4paper]{article}
 %\usepackage{natbib}
 %\usepackage{biblatex}
+\usepackage{hyperref}
 \usepackage[style=authoryear,natbib=true]{biblatex}
 \bibliography{D:/Research/bib/Parsing}
 \usepackage{graphicx}
@@ -54,7 +55,7 @@ TODO(Bruno?)
 \subsection{Dialog Act prediction as sequential labeling problem}
 Strictly speaking Dialog Act prediction is quite different to typical sequential labeling problem such as POS tagging or speech recognition. The reason is that in traditional sequential labeling problem, the observed states which are required to be tagged are all available or at least a bunch of them are available as a minimal unit. However, in dialog act prediction problem, the observed states are dynamic and growing. And during run time, the dialog act predictor cares more about current state. Though the previous states may contain errors, the system would not have any interests to retag them and correct the mistakes in the history. This kinds of reflects the two different natures of theses two tasks.
 
-However, we can still use sequential labeling methods to treat this problem. This is based on these observation:
+However, we can still use sequential labeling methods to treat this problem. This is based on these observations:
 \begin{itemize}
     \item First of all, we can consider the each dialog as a processing unit. During running time, we can consider the incomplete dialog as a unit to be tagged. Based on our observation, this way works in practice. We consider it may be relative to CRF's global optimization way to decode. 
     \item Secondly, in running time, there are actually two different types of tasks:
@@ -63,6 +64,7 @@ However, we can still use sequential labeling methods to treat this problem. Thi
             \item generate the right speech act of the system. This is different from sequential tagging problem because for the current hidden state, there is no observable data about it. To make sequential labeling work with it, we can shift the data alignment, e.g, we can consider the current hidden state is emitted from the previous observable data as demonstrated in Table \ref{table:system_align} 
         \end{itemize}
 \end{itemize}
+
 \begin{table}
     \begin{tabular}{|l|l|}
         \hline
@@ -103,11 +105,46 @@ However, we can still use sequential labeling methods to treat this problem. Thi
 \end{table}
 
 \subsection{Features Engineering}
-TODO(Wei)
-1 page
-\section{Experiment}
-TODO(Wei)
-1 page
+To make fully use the history and the content, tried out some features extracted from the dialog:
+\begin{itemize}
+    \item The agent of the current speech
+    \item Whether the current speech consists of multiple sentences. This feature is based on the observation that for simple question, e,.g., ask(age), both the question and the answer would be very simple. But for some complicated questions such as ask(preference, drink), both of the question and the answer can be longer.
+    \item Whether the last sentence of current speech is a question or not. This feature is intuitive.
+    \item We also use the bag of words as feature. This encodes the actual content of the speech. For bag words features, we filter out the stop words, and use a French tokenizer called \href{https://github.com/boudinfl/kea}{KEA} to do the tokenization.
+    \item we also planned to extract the POS information as features. However it turns out that to be not that easy to find a satisfying POS tagger.
+\end{itemize}
+
+For the feature template for CRF, we tried out two different templates:
+\begin{itemize}
+    \item We use the current speech features mentioned above but not including the BoW features, and the same features from the previous state. For binary feature template we only use the exactly previous predicted tag. This means all of the features we used are only based on current state and previous state(Table \ref{table:feature}). The reason that we don't want to incorporate longer history is due to two reasons:
+        \begin{itemize}
+            \item The corpus is relatively small, we don't want to overfit it
+            \item The most important observation is that the dialogs are generated from the same source and almost by the same way. So there is an almost fixed pattern underneath. We consider that using long history would overfit the automata underneath.
+        \end{itemize}
+    \item the second template is an extension of the first one, we add BoW features of current state.
+\end{itemize}
+\begin{table}
+    \begin{center}
+    \begin{tabular}{|l|}
+    \hline
+    \#Unigram      \\ 
+    U00:\%x[0,0]  \\ 
+    U01:\%x[0,1]  \\ 
+    U02:\%x[0,2]  \\ 
+    U04:\%x[-1,0] \\ 
+    U05:\%x[-1,1] \\ 
+    U06:\%x[-1,2] \\ 
+    \#Bigram       \\
+    B\\
+    \hline
+    \end{tabular}
+    \caption{Feature tempate for CRF++}
+    \label{table:feature}
+    \end{center}
+\end{table}
+\section{Implementation \& Experiment}
+Our whole solution is based on \href{http://crfpp.googlecode.com/svn/trunk/doc/index.html}{CRF++}, \href{http://scikit-learn.org/stable/}{scikit-learn}, \href{http://nltk.org/}{NLTK}. CRF++ is a implementation of CRF which provides a data format which is easy to follow. We use it to do both the training and decode. It's written in C++ but provides various bindings for other languages. Scikit-learn is a machine learning toolset for python. We only use it to build the vector space model. NLTK is a leading platform for building Python programs to work with human language data. It provides easy-to-use interfaces to over 50 corpora and lexical resources such as WordNet, along with a suite of text processing libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning. We only use its French sentence splitter and its French stopping words corpus.
+
 \section{Conclusion \& Future Work}
 TODO(?)
 0.5 page
