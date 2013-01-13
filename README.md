@@ -52,3 +52,4 @@ To evaluate our result, run:
 perl conlleval.pl -r -d '\t'` < result_you_got
 ```
 `
+To check more information of this project, read our report.
