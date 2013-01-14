@@ -1,0 +1,77 @@
+>mana:Avant de commencer j'ai besoin de quelques informations! |||| other
+>mana:Quel age as tu ? |||| ask(age)
+>learner:41 ans |||| answer(age)
+>mana:Es tu une femme ou un homme ? |||| ask(gender)
+>learner:Un homme. |||| answer(gender)
+>mana:Quelle est ta langue maternelle ? |||| ask(firstLang)
+>learner:Le français. (14) |||| answer(firstLang)
+>mana:Parles tu une deuxième langue ? |||| ask(secondLang)
+>learner:L'anglais. (11) |||| answer(secondLang)
+>mana:Merci, nous pouvons commencer le dialogue. |||| other
+>mana:Bienvenue dans ma maison , je suis le chat , veux tu jouer avec moi ? |||| ask(ready)
+>learner:oui |||| answer(ready)
+>mana:Super , comment vas tu aujourd'hui? |||| ask(health)
+>learner:Un peu humide comme journée mais ca va. |||| answer(health)
+>mana:Oui c'est vrai! |||| inform(health)
+>mana:Viens , je vais te montrer la cuisine . |||| other
+>mana:Dans la cuisine , on prépare les repas . Je fais souvent des soupes . Préfères tu la soupe ou la salade ? |||| ask(preferred_meal)
+>learner:en ce moment une bonne soupe chaude me tente bien |||| answer(preferred_meal,preferred_option)
+>mana:Oui la soupe c' est très bon . |||| confirm(preferred_meal,preferred_option)
+>mana:Avec mon repas , je mange toujours du fromage . |||| inform(preferred_meal)
+>mana:Sais tu où on range le fromage dans une cuisine ? |||| ask(cheese-where)
+>learner:En ce qui me concerne, je les stoke dans le frigo |||| answer(cheese-where,posible_option)
+>mana:Tu as raison ! |||| ack
+>mana:On range le fromage dans le frigidaire . |||| inform(cheese-where)
+>mana:Avec mon repas je bois toujours du lait . Et toi , qu' est ce que tu aimes boire , est ce que tu préfères le lait , l' eau ou le vin ? |||| ask(drink)
+>learner:ça dépend du moment de la journée mais en générale je préfère de l'eau. |||| answer(drink,preferred_option)
+>mana:En effet cela dépend des circonstances . |||| ack
+>mana:En France , on boit du vin ou de l' eau avec les repas . |||| inform(drink)
+>mana:Pour mettre la table , il faut des cuillères , des fourchettes , des couteaux et encore d' autres choses . Peux tu nommer un autre objet à mettre sur la table avant le repas ? |||| ask(table-objects)
+>learner:A priori il faut aussi des verres. |||| inform(table-objects)
+>mana:Oui tout à fait . |||| ack
+>mana:Sur la table , on met les assiettes , une carafe d' eau , du sel , du poivre et des verres . |||| inform(table-objects)
+>mana:Après le repas , il faut ranger et nettoyer . Pour le sol , j' utilise le balai mais on peut aussi utiliser un autre objet . Sais tu lequel ? |||| ask(nettoie_sol)
+>learner:On peut prendre une serpillère. |||| answer(nettoie_sol,posible_option)
+>mana:c' est vrai . |||| ack
+>mana:On peut aussi utiliser un aspirateur . |||| inform(nettoie_sol,posible_option)
+>mana:Merci pour cette petite conversation . Au revoir et à la prochaine fois ! |||| quit
+
+>mana:Avant de commencer j' ai besoin de quelques informations ! |||| other
+>mana:Quel age as tu ? |||| ask(age)
+>learner:32 ans |||| answer(age)
+>mana:Es tu une femme ou un homme ? |||| ask(gender)
+>learner:je suis une femme |||| answer(gender)
+>mana:Quelle est ta langue maternelle ? |||| ask(firstLang)
+>learner:ma langue maternelle est tamazighte |||| answer(firstLang)
+>mana:Es tu bilingue ? Si oui quelle est ta deuxième langue maternelle ? |||| ask(bilingue)
+>learner:oui je le suis, ma seconde langue est l'arabe (2) |||| answer(bilingue)
+>mana:Parles tu une autre langue ? Si oui laquelle . |||| ask(secondLang)
+>learner:oui, je parle également le français et l'anglais (14 - 11) |||| answer(secondLang)
+>mana:Comment as tu appris le français ? |||| ask(frenchContact)
+>learner:j'ai appris le français à l'école (2) |||| answer(frenchContact)
+>mana:Merci , nous pouvons commencer le dialogue . |||| other
+>mana:Bonjour , je suis le chat . Veux tu jouer avec moi ? |||| ask(ready)
+>learner:Oui, avec plaisir. |||| answer(ready)
+>mana:Super , comment vas tu ? |||| ask(health)
+>learner:ça va, je vais bien. et toi tu vas bien? |||| answer(health)
+>mana:Moi,je vais bien aussi, merci ! |||| inform(health)
+>mana:Viens je vais te montrer la cuisine . |||| other
+>mana:J' aime préparer les repas . Je fais souvent des soupes . Préfères tu la soupe ou la salade ? |||| ask(preferred_meal)
+>learner:Franchement, je n'aime ni la soupe ni la salade. |||| answer(preferred_meal,dont_know)
+>mana:oh, moi ce que je préfère c'est le fromage. J'en mange avec tous mes repas. |||| other
+>mana:Sais tu où on range le fromage dans une cuisine ? |||| ask(cheese-where)
+>learner:Je pense qu'il faut le ranger dans le frigo |||| answer(cheese-where,posible_option)
+>mana:Tu as raison ! |||| confirm(cheese-where,posible_option)
+>mana:On range le fromage dans le frigidaire . |||| inform(cheese-where)
+>mana:Avec mon repas je bois toujours du lait . Et toi , qu' est ce que tu aimes boire , est ce que tu préfères le lait , l' eau ou le vin ? |||| ask(drink)
+>learner:Personnelement, j'aime boire du jus avec mon repas. |||| answer(drink,preferred_option)
+>mana:Oui le jus de fruit, c' est bon aussi . |||| confirm(drink,preferred_option)
+>mana:En France , on boit souvent du vin avec les repas . |||| inform(drink)
+>mana:Pour mettre la table , il faut des cuillères , des fourchettes , des couteaux et encore d' autres choses . Peux tu nommer un autre objet à mettre sur la table avant le repas ? |||| ask(table-objects)
+>learner:Il faut mettre du sel sur la table avant le repas. |||| inform(table-objects)
+>mana:Oui c' est vrai. |||| ack
+>mana:Sur la table , on met les assiettes , une carafe d' eau , du poivre et des verres . |||| inform(table-objects)
+>mana:Après le repas , il faut ranger et nettoyer . Pour le sol , j' utilise le balai mais on peut aussi utiliser un autre objet . Sais tu lequel ? |||| ask(nettoie_sol)
+>learner:Je pense que le second objet qu'on peut utiliser pour nettoyer le sol est bien l'aspirateur. |||| answer(nettoie_sol,posible_option)
+>mana:Tout à fait! |||| confirm(cheese-where,posible_option)
+>mana:Merci pour cette petite conversation . Au revoir et à la prochaine fois ! |||| quit

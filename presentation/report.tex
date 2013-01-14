@@ -1,0 +1,298 @@
+%        File: GraphDependencyParsing.tex
+%     Created: 周一 十二月 05 04:00 下午 2011 W EST
+% Last Change: 周一 十二月 05 04:00 下午 2011 W EST
+%
+\documentclass[slidestop,compress]{beamer}
+\usetheme{Antibes}
+%\usecolortheme{lily}
+%\usepackage{CJK}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=right}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{tikz-qtree}
+\usepackage{amsmath}
+\usepackage{tikz-dependency}
+\usepackage{xunicode}
+\usepackage{fontspec}
+\usepackage{colortbl}
+\usepackage{algorithmic}
+\usepackage{tikz-qtree}
+%\setsansfont{微软雅黑}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\title{Dialog Act tagging with CRF}
+%\title{\Tree [.S [.NP LaTeX ] [.VP [.V is ] [.NP fun ] ] ]}
+\author{Wei Qiu \and Natalia Korchagina \and Bruno Andrimiarina}
+\date{Jan 15, 2013}
+\begin{document}
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\AtBeginSection[] % Do nothing for \section*
+{
+\begin{frame}<beamer>
+\frametitle{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\AtBeginSubsection[] % Do nothing for \subsection*
+{
+\begin{frame}<beamer>
+\frametitle{Outline}
+\tableofcontents[currentsection,currentsubsection]
+\end{frame}
+}
+
+\frame{\frametitle{Outline}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+
+%\section{Three graphical models}
+%\subsection{Factored RBM}
+%\subsection{Temporal Factored RBM}
+%
+%\frame{\frametitle{Motivation}
+%\begin{itemize}
+%    \item As in N-gram models, Markov assumption is still made in factored RBM.
+%    \item If we want to use larger context, normally we will have more (exponentially) parameters to estimate.
+%    \item take advantage large context without increasing dramatically number of parameters.
+%\end{itemize}
+%}
+%
+%\frame{\frametitle{Temporal Factored RBM}
+%\begin{center}
+%\includegraphics[width=0.8\textwidth]{TRBM.png}
+%\end{center}
+%}
+%
+%\frame{\frametitle{Turn FRBM into a temporal model}
+%\begin{itemize}
+%    \item Given a sequence $w_{1:t}$, apply an instance of the FRBM to each of the n-tuples in the sequence in succession.
+%    \item Make the hidden units of the $n^{th}$ instance depend on the hidden units of the $n-1^{st}$ instance by making the hidden biases of the $n^{th}$ instance a linear function of the hidden states on the $n-1^{st}$ instance.
+%    \item Make predictions as before, but use the new ``shifted'' biases.
+%\end{itemize}
+%}
+%
+%\frame{\frametitle{Learning and Inference in TFRBM}
+%\begin{itemize}
+%    \item Exact Inference in TFRBM is in tractable because there are too many variables depend on each other. 
+%        \begin{itemize}
+%            \item even filtering is intractable
+%        \end{itemize}
+%    \item Approximate filtering by using the mean field approximation to the previous hidden state distribution when shifting the biases.
+%    \item Temporal connections are learned greedily by treating the previous hidden state as a constant put and using the CD learning rule.
+%    \item The non-temporal parameters are learned as before.
+%\end{itemize}
+%}
+%
+%\subsection{Logbilinear model}
+%\frame{\frametitle{Motivation}
+%\begin{itemize}
+%    \item It's still hard to learn with a bunch of hidden variables!
+%    \item what about getting rid of them?
+%    \item Assumption: the next word is kind of ``linear transformation'' of context words.
+%\end{itemize}
+%}
+%
+%\frame{\frametitle{Log-bilinear model}
+%\begin{itemize}
+%    \item Energy function: $E(w_{1:n}) = -\sum_{i=1}^{n-1} w_i^TRC_iR^Tw_n$
+%    \item The resulting model can be viewed as FRBM with visible-to-visible connections but without hidden units.
+%\end{itemize}
+%}
+%
+%\frame{\frametitle{Log-bilinear model}
+%\begin{center}
+%\includegraphics[width=0.7\textwidth]{logbilib.png}
+%\end{center}
+%}
+%
+%\section{Conclusion}
+%\frame{\frametitle{Conclusion}
+%\begin{itemize}
+%    \item Log-bilinear models outperform FRBM-based models as well as the best n-gram models and are easier to train than models with hidden units.
+%    \item Adding temporal connections to the FRBM model makes it perform much better.
+%    \item Averaging the predictions of any network model with a good n-gram model results in better predictions than using any model on its own.
+%    \item \textcolor{red}{Remarks}: this paper is highly inspired by \textcolor{red}{deep Learning} which seems very promising.
+%\end{itemize}
+%}
+
+\section{Introduction}
+\frame{\frametitle{Introduction}
+Dialog act tagging:
+\begin{itemize}
+    \item A module in modern dialog system
+    \item guide the system to take certain action according to user's response
+    \item a lot of researchers treat it as a partially observable Markov decision process.
+\end{itemize}
+}
+
+
+\frame{\frametitle{Corpus analysis}
+In this project we are working on a small part of corpus from ALLEGRO chatterbox.
+Some statistics of this corpus:
+\begin{itemize}
+    \item Average lines per dialog: 35.0
+    \item Average sentences per dialog: 65.0
+    \item Average words per dialog: 376.0
+    \item Average words per sentences: 5.0
+\end{itemize}
+
+}
+
+\frame{\frametitle{Corpus analysis}
+Every speech in the dialogs was tagged wrt the given annotation tags.
+\begin{itemize}
+    \item Request: ask(ready), ask(age), ask(gender), etc
+    \item Answer: answer(ready), answer(no-ready)
+    \item information, inform(table-objects), inform(cheese-where), etc
+    \item Confirmation: confirt(nettoie\_sol, preferred\_option)
+    \item Greeting: greet
+    \item Acknowledge: ack
+    \item Out of context: other
+    \item Don't know: dont-know
+\end{itemize}
+}
+
+\frame{\frametitle{Corpus analysis}
+Problems we've encountered in the corpus:
+\begin{itemize}
+    \item Typo in the tags, ``possible\_option vs posible option'' which introduce more tags than predefined tags.
+    \item some tags are too general, ``other''
+    \item A lot of dialogs follow the same pattern, which would lead to overfitting.
+    \item unbalanced, some tags are extremely rare.
+\end{itemize}
+}
+\section{Dialog act tagging as sequential labeling}
+\frame{\frametitle{Dialog act tagging as sequential labeling}
+Dialog act tagging in real running system can not be treated as sequential labeling simply:
+\begin{itemize}
+    \item there is no observable data for system's current move
+    \item the system only cares about the current state, it doesn't care about the mistakes made in the history.
+\end{itemize}
+But we can work around it by shifting the alignment.
+}
+
+\frame{\frametitle{Dialog act tagging as sequential labeling}
+\begin{table}
+    \begin{tabular}{|l|l|}
+        \hline
+        mana    & other              \\ \hline
+        mana    & ask(age)           \\ \hline
+        learner & answer(age)        \\ \hline
+        mana    & ask(gender)        \\ \hline
+        learner & answer(gender)     \\ \hline
+        mana    & ask(firstLang)     \\ \hline
+        learner & answer(firstLang)  \\ \hline
+        mana    & ask(bilingue)      \\ \hline
+        learner & answer(bilingue)   \\ \hline
+        mana    & ask(secondLang)    \\ \hline
+        learner & ?                  \\ \hline
+    \end{tabular}
+    \caption{To tag the content generated by user}
+    \label{table:user_align}
+\end{table}
+
+}
+
+\frame{\frametitle{Dialog act tagging as sequential labeling}
+\begin{table}
+    \begin{tabular}{|l|l|}
+        \hline
+        mana    & Begin \\ \hline
+        mana    & other              \\ \hline
+        learner & ask(age)           \\ \hline
+        mana    & answer(age)        \\ \hline
+        learner & ask(gender)        \\ \hline
+        mana    & answer(gender)     \\ \hline
+        learner & ask(firstLang)     \\ \hline
+        mana    & answer(firstLang)  \\ \hline
+        learner & ask(bilingue)      \\ \hline
+        mana    & answer(bilingue)   \\ \hline
+        learner & ask(secondLang)    \\ \hline
+        End     & ?                  \\ \hline
+    \end{tabular}
+    \caption{To tag the system move}
+    \label{table:system_align}
+\end{table}
+
+}
+\frame{\frametitle{conditional random fields}
+\begin{itemize}
+    \item Similar to HMM
+    \item but discriminative undirected graphical model 
+    \item can make use of long distance features easily
+    \item widely used in sequential labeling problem
+    \item quite often provides state of the art result on sequential labeling task.
+
+\end{itemize}
+}
+
+\section{Experiment and Result}
+\frame{\frametitle{Features}
+\begin{itemize}
+    \item The agent of current speech
+    \item Whether the current speech consists of multiple sentences.
+    \item Whether the last sentence is a question or not
+    \item *Bag of Words
+        \begin{itemize}
+            \item Stopwords are filtered
+            \item tokenized by KEA
+        \end{itemize}
+\end{itemize}
+We use CRF++ to train the model
+}
+
+\frame{\frametitle{Feature template for CRF++}
+\begin{table}
+    \begin{center}
+    \begin{tabular}{|l|}
+    \hline
+    \#Unigram      \\ 
+    U00:\%x[0,0]  \\ 
+    U01:\%x[0,1]  \\ 
+    U02:\%x[0,2]  \\ 
+    U04:\%x[-1,0] \\ 
+    U05:\%x[-1,1] \\ 
+    U06:\%x[-1,2] \\ 
+    \#Bigram       \\
+    B\\
+    \hline
+    \end{tabular}
+    \caption{Feature tempate for CRF++}
+    \label{table:feature}
+    \end{center}
+\end{table}
+}
+
+\frame{\frametitle{Result}
+\begin{itemize}
+    \item Model without BoW features: 82.63\%
+    \item Model with BoW features: 89.2\%
+\end{itemize}
+Some errors:
+\begin{itemize}
+    \item answer(bilingue)
+    \item answer(nettoie\_sol, possible\_option)(!typo)
+    \item answer(sencondlang)
+    \item answer(dont\_know)
+    \item reqRep
+\end{itemize}
+}
+
+\section{Conclusion}
+\frame{\frametitle{Conclusion}
+\begin{itemize}
+    \item we showed that even this task is not sequential labeling task, we can work around it easily
+    \item BoW features are helpful for sequential labeling though it dramatically increase the complexity of the model.
+    \item we can foresee that this method wouldn't work very well in a running system
+    \item proposal for hierarchical classify. 
+\end{itemize}
+}
+\end{document}
+
+
